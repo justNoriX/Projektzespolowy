@@ -1,0 +1,67 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-test:
+    name: Build & Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Lint code
+        run: |
+          pip install flake8
+          flake8 .
+
+      - name: Run tests
+        run: |
+          pip install pytest
+          pytest
+
+  security:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    needs: build-test
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Run Bandit (SAST)
+        run: |
+          pip install bandit
+          bandit -r .
+
+      - name: Run Trivy (SCA)
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: "fs"
+          scan-ref: "."
+
+  deploy:
+    name: Deploy Application
+    runs-on: ubuntu-latest
+    needs: security
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Deploy to Server
+        run: echo "Deploying..."
