@@ -1,0 +1,31 @@
+# Python
+*.pyc
+*.pyo
+*.pyd
+__pycache__
+db.sqlite3  # Ignorowanie bazy danych SQLite (jeśli używasz)
+*.db
+*.log
+*.pot
+*.py[cod]
+*.swp
+
+# Django
+/static/        # Ignorowanie plików statycznych generowanych przez collectstatic
+/media/         # Ignorowanie plików multimedialnych (np. zdjęć, filmów)
+
+# Virtual environment
+venv/           # Ignorowanie folderu wirtualnego środowiska
+
+# Node.js (jeśli kiedykolwiek dodasz frontend)
+node_modules/   # Ignorowanie zainstalowanych zależności Node.js
+
+# IDE files
+.vscode/         # Ignorowanie folderu VSCode
+.idea/           # Ignorowanie folderu PyCharm/IntelliJ
+*.sublime-workspace
+*.sublime-project
+
+# OS-specific files
+.DS_Store       # Ignorowanie plików systemowych w macOS
+Thumbs.db       # Ignorowanie plików systemowych w Windows
