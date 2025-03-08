@@ -1,11 +1,9 @@
 version: 2
 updates:
-  - package-ecosystem: "npm"
-    directory: "/"  # Główna ścieżka projektu
+  - package-ecosystem: "pip"
+    directory: "/"
     schedule:
-      interval: "daily"  # Aktualizacje raz w tygodniu
+      interval: "weekly"
     open-pull-requests-limit: 5
-    ignore:
-      - dependency-name: "react"
-        versions: ["18.x"]  # Pomija aktualizacje Reacta do wersji 18.x
+
 
