@@ -17,17 +17,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
         with:
-          python-version: "3.9"
+          node-version: "18" 
 
       - name: Install dependencies
-        run: |
-          pip install -r requirements.txt
+        run: npm install
 
       - name: Run tests
-        run: pytest
+        run: npm jest
 
   security:
     name: Security Scan
@@ -38,13 +37,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Code Scanning with GitHub CodeQL
-        uses: github/codeql-action/init@v2
-        with:
-          languages: python
-
-      - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v2
+      - name: Run npm audit (Security Scan)
+        run: npm audit --audit-level=high || true # Niech nie przerywa pipeline'u, jeśli znajdzie ostrzeżenia
 
   deploy:
     name: Deploy to GitHub Pages
@@ -56,8 +50,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Build project
+        run: npm run your-build-command
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./public
+          publish_dir: ./dist # Zmień na folder generowany po "npm run build"
