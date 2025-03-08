@@ -29,6 +29,7 @@ jobs:
 
       - name: Run Django tests
         run: |
+          cd MaceWindu
           python manage.py test
 
   security:
