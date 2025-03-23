@@ -24,3 +24,6 @@ node_modules/   # Ignorowanie zainstalowanych zależności Node.js
 # OS-specific files
 .DS_Store       # Ignorowanie plików systemowych w macOS
 Thumbs.db       # Ignorowanie plików systemowych w Windows
+
+#Envirovment variables
+MaceWindu/.env
