@@ -1,4 +1,4 @@
-Django~=5.1.7
+Django~=4.2.20
 bandit
 safety
 django-environ~=0.12.0
