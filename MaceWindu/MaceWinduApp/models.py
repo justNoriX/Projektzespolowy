@@ -2,8 +2,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
 
-class User(AbstractUser):
-    username = models.CharField(unique=True, max_length=50, null=True, blank=True)
+class CustomUser(AbstractUser):
+
     email = models.EmailField(
         _('email address'),
         unique=True
@@ -11,18 +11,18 @@ class User(AbstractUser):
     first_name = models.CharField(
         max_length=20
     )
-    surname = models.CharField(
+    last_name = models.CharField(
         max_length=30
     )
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username','first_name','surname']
+    REQUIRED_FIELDS = ['username','first_name','last_name']
 
     def __str__(self):
         return "{}".format(self.email)
 
 class ObservationPoint(models.Model):
     user = models.ForeignKey(
-        User,
+        CustomUser,
         on_delete=models.CASCADE)
     title = models.CharField(
         max_length=20

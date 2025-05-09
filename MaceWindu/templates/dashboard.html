@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>Welcome, {{ user.first_name }}!</h2>
+  <p>Username: {{ user.username }}</p>
+  <p>Email: {{ user.email }}</p>
+  <p>First name and surname: {{ user.first_name }} {{ user.last_name }}</p>
+  <a href="{% url 'logout' %}">Log out</a>
+{% endblock %}

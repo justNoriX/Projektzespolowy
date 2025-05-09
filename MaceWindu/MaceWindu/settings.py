@@ -24,7 +24,7 @@ environ.Env.read_env(os.path.join(BASE_DIR,'.env'))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env('SECRET_KEY')
-AUTH_USER_MODEL="MaceWinduApp.User"
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -58,7 +58,7 @@ ROOT_URLCONF = 'MaceWindu.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR/'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -88,7 +88,7 @@ DATABASES = {
     }
 }
 
-
+AUTH_USER_MODEL="MaceWinduApp.CustomUser"
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
