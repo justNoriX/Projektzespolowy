@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import CustomUser
+
+from .models import CustomUser, ObservationPoint
 from django.contrib.auth import authenticate
 
 class CustomUserCreationForm(UserCreationForm):
@@ -38,3 +39,13 @@ class LoginForm(forms.Form):
         return cleaned_data
     def get_user(self):
         return self.user
+
+class ObservationPointForm(forms.ModelForm):
+    class Meta:
+        model=ObservationPoint
+        fields=['title','description','latitude','longitude','energyCostPerKWh']
+        widgets = {
+            'description': forms.Textarea(attrs={'rows': 3}),
+        }
+
+

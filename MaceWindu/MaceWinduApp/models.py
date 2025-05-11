@@ -1,3 +1,4 @@
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
@@ -25,14 +26,36 @@ class ObservationPoint(models.Model):
         CustomUser,
         on_delete=models.CASCADE)
     title = models.CharField(
-        max_length=20
+        max_length=20,
     )
-    description = models.TextField(
+    description = models.CharField(
         max_length=100
     )
-    longitude = models.FloatField()
-    latitude = models.FloatField()
-    energyCostPerKWh = models.FloatField()
+    latitude = models.DecimalField(
+        max_digits=8,
+        decimal_places=6,
+        validators=[
+            MinValueValidator(-90.0),
+            MaxValueValidator(90.0)
+        ]
+    )
+
+    longitude = models.DecimalField(
+        max_digits=9,
+        decimal_places=6,
+        validators=[
+            MinValueValidator(-180.0),
+            MaxValueValidator(180.0)
+        ]
+    )
+    energyCostPerKWh=models.DecimalField(
+        max_digits=4,
+        decimal_places=2,
+        validators=[
+            MinValueValidator(0.01),
+            MaxValueValidator(99.99)
+        ]
+    )
 
 class SnapShot(models.Model):
     observation_point = models.ForeignKey(

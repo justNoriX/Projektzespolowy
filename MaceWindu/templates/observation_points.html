@@ -1,0 +1,14 @@
+<h2>Twoje lokalizacje</h2>
+<ul>
+  {% for observation_point in observation_points %}
+    <li>
+      <strong>{{ observation_point.title }}</strong><br>
+      Opis: {{ observation_point.description }}<br>
+      Lokalizacja: {{ observation_point.latitude }}, {{ observation_point.longitude }}<br>
+      Koszt energii: {{ observation_point.energyCostPerKWh }} zł/kWh
+    </li>
+  {% empty %}
+    <li>Brak lokalizacji</li>
+  {% endfor %}
+      <a href="{% url 'add_observation_point' %}">Dodaj nową lokalizację</a>
+</ul>
