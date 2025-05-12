@@ -1,0 +1,7 @@
+<h2>Czy na pewno chcesz usunąć lokalizację: {{ point.title }}?</h2>
+
+<form method="POST">
+    {% csrf_token %}
+    <button type="submit">Tak, usuń</button>
+    <a href="{% url 'observation_points_list' %}">Anuluj</a>
+</form>

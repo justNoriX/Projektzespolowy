@@ -13,9 +13,12 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.views.generic import RedirectView
+
 import MaceWinduApp
 from django.urls import include, path
 
 urlpatterns = [
-    path('MaceWindu/',include("MaceWinduApp.urls"))
+    path('MaceWindu/',include("MaceWinduApp.urls")),
+path('', RedirectView.as_view(url='/MaceWindu/dashboard/', permanent=False))
 ]

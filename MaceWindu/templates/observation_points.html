@@ -6,9 +6,18 @@
       Opis: {{ observation_point.description }}<br>
       Lokalizacja: {{ observation_point.latitude }}, {{ observation_point.longitude }}<br>
       Koszt energii: {{ observation_point.energyCostPerKWh }} zł/kWh
+        <a href="{% url 'update_observation_point' observation_point.id %}">Edytuj</a>
+    <a href="{% url 'delete_observation_point' observation_point.id %}">Usuń</a>
     </li>
   {% empty %}
     <li>Brak lokalizacji</li>
   {% endfor %}
+    {% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+      <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
       <a href="{% url 'add_observation_point' %}">Dodaj nową lokalizację</a>
 </ul>
