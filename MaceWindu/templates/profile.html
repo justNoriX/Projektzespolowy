@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block content %}
+  <p>Nazwa użytkownika: {{ user.username }}</p>
+  <p>Email: {{ user.email }}</p>
+  <p>Imię oraz nazwisko: {{ user.first_name }} {{ user.last_name }}</p>
+    <a href="{% url 'update_user_profile' %}">Zaktualizuj nazwę użytkownika, imię oraz nazwisko</a>
+  <a href="{% url 'logout' %}">Wyloguj</a>
+{% endblock %}

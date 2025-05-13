@@ -1,3 +1,5 @@
+{% extends "base.html" %}
+{% block content %}
 <h2>Czy na pewno chcesz usunąć lokalizację: {{ point.title }}?</h2>
 
 <form method="POST">
@@ -5,3 +7,4 @@
     <button type="submit">Tak, usuń</button>
     <a href="{% url 'observation_points_list' %}">Anuluj</a>
 </form>
+{% endblock %}

@@ -1,9 +1,14 @@
 {% extends "base.html" %}
 {% block content %}
-  <h2>Witaj, {{ user.first_name }}!</h2>
-  <p>Nazwa użytkownika: {{ user.username }}</p>
-  <p>Email: {{ user.email }}</p>
-  <p>Imię oraz nazwisko: {{ user.first_name }} {{ user.last_name }}</p>
+  <h2>Witaj, {{ user.username }}!</h2>
+    {% if messages %}
+  <ul>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
+<a href="{% url 'profile' %}">Profil użytkownika</a>
     <a href="{% url 'observation_points_list' %}">Wypisz lokalizacje</a>
-  <a href="{% url 'logout' %}">Log out</a>
+  <a href="{% url 'logout' %}">Wyloguj</a>
 {% endblock %}

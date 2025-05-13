@@ -90,6 +90,7 @@ DATABASES = {
 
 AUTH_USER_MODEL="MaceWinduApp.CustomUser"
 LOGIN_URL='/MaceWindu/login'
+X_FRAME_OPTIONS="DENY"
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 

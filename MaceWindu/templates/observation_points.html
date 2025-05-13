@@ -1,3 +1,5 @@
+{% extends "base.html" %}
+{% block content %}
 <h2>Twoje lokalizacje</h2>
 <ul>
   {% for observation_point in observation_points %}
@@ -21,3 +23,4 @@
 {% endif %}
       <a href="{% url 'add_observation_point' %}">Dodaj nową lokalizację</a>
 </ul>
+{% endblock %}

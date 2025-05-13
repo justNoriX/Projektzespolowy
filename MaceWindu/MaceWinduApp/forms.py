@@ -5,10 +5,10 @@ from .models import CustomUser, ObservationPoint
 from django.contrib.auth import authenticate
 
 class CustomUserCreationForm(UserCreationForm):
-    username=forms.CharField(required=True, label="Username")
-    first_name=forms.CharField(required=True, max_length=20, label="First name")
-    last_name=forms.CharField(required=True, max_length=30,label="Last name")
-    email=forms.EmailField(required=True,label="Email address")
+    username=forms.CharField(required=True, label="Nazwa użytkownika")
+    first_name=forms.CharField(required=True, max_length=20, label="Imię")
+    last_name=forms.CharField(required=True, max_length=30,label="Nazwisko")
+    email=forms.EmailField(required=True,label="Adres e-mail")
 
     class Meta:
         model=CustomUser
@@ -20,8 +20,8 @@ class LoginForm(forms.Form):
         self.user = None
         super().__init__(*args,**kwargs)
 
-    email = forms.EmailField(required=True, label="Email address")
-    password=forms.CharField(required=True,label="Password",widget=forms.PasswordInput)
+    email = forms.EmailField(required=True, label="Adres e-mail")
+    password=forms.CharField(required=True,label="Hasło",widget=forms.PasswordInput)
     def clean(self):
         cleaned_data=super().clean()
         email=cleaned_data.get('email')
@@ -31,10 +31,10 @@ class LoginForm(forms.Form):
             try:
                 user_object=CustomUser.objects.get(email=email)
             except CustomUser.DoesNotExist:
-                raise forms.ValidationError("Email or password not valid!")
+                raise forms.ValidationError("Adres e-mail lub hasło nie są prawidłowe")
             user=authenticate(username=user_object.email,password=password)
             if user is None:
-                raise forms.ValidationError("Email or password not valid!")
+                raise forms.ValidationError("Adres e-mail lub hasło nie są prawidłowe")
             self.user=user
         return cleaned_data
     def get_user(self):
@@ -47,5 +47,26 @@ class ObservationPointForm(forms.ModelForm):
         widgets = {
             'description': forms.Textarea(attrs={'rows': 3}),
         }
+        labels = {
+            'title': 'Nazwa lokalizacji',
+            'description': 'Opis',
+            'latitude': 'Szerokość geograficzna',
+            'longitude': 'Długość geograficzna',
+            'energyCostPerKWh':"Koszt energii elektrycznej na KWh"
+        }
 
-
+#formularz do aktualizacji username, first name oraz last name
+class UpdateUserUFLNameForm(forms.ModelForm):
+    class Meta:
+        model=CustomUser
+        fields=['username','first_name','last_name']
+        labels = {
+            'username': 'Nazwa użytkownika',
+            'first_name': 'Imię',
+            'last_name': 'Nazwisko'
+        }
+        help_texts = {
+            'username': None,
+            'first_name': None,
+            'last_name':None
+        }

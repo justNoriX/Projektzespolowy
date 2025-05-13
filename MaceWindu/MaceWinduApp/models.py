@@ -1,19 +1,26 @@
-from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator, MinLengthValidator
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
 
 class CustomUser(AbstractUser):
 
+    username = models.CharField(
+        max_length=20,
+        validators=[MinLengthValidator(5)]
+    )
     email = models.EmailField(
         _('email address'),
         unique=True
     )
     first_name = models.CharField(
-        max_length=20
+        max_length=20,
+        validators=[MinLengthValidator(2)]
+
     )
     last_name = models.CharField(
-        max_length=30
+        max_length=30,
+        validators=[MinLengthValidator(2)]
     )
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username','first_name','last_name']
@@ -27,6 +34,7 @@ class ObservationPoint(models.Model):
         on_delete=models.CASCADE)
     title = models.CharField(
         max_length=20,
+        validators=[MinLengthValidator(5)]
     )
     description = models.CharField(
         max_length=100
@@ -62,7 +70,10 @@ class SnapShot(models.Model):
         ObservationPoint,
         on_delete=models.CASCADE)
     title = models.CharField(
-        max_length=20
+        max_length=20,
+        validators=[
+            MinLengthValidator(5)
+        ]
     )
     description = models.TextField(
         max_length=100
