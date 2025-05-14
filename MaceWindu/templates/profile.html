@@ -1,5 +1,12 @@
 {% extends "base.html" %}
 {% block content %}
+    {% if messages %}
+  <ul>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
   <p>Nazwa użytkownika: {{ user.username }}</p>
   <p>Email: {{ user.email }}</p>
   <p>Imię oraz nazwisko: {{ user.first_name }} {{ user.last_name }}</p>

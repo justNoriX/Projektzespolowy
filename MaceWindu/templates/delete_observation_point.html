@@ -5,6 +5,7 @@
 <form method="POST">
     {% csrf_token %}
     <button type="submit">Tak, usuń</button>
-    <a href="{% url 'observation_points_list' %}">Anuluj</a>
+
 </form>
+    <a href="{% url 'observation_points_list' %}">Anuluj</a>
 {% endblock %}

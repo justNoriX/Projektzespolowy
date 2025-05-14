@@ -1,6 +1,13 @@
 {% extends "base.html" %}
 {% block content %}
 <h2>Twoje lokalizacje</h2>
+    {% if messages %}
+  <ul>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
 <ul>
   {% for observation_point in observation_points %}
     <li>
@@ -14,13 +21,6 @@
   {% empty %}
     <li>Brak lokalizacji</li>
   {% endfor %}
-    {% if messages %}
-  <ul class="messages">
-    {% for message in messages %}
-      <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-    {% endfor %}
-  </ul>
-{% endif %}
       <a href="{% url 'add_observation_point' %}">Dodaj nową lokalizację</a>
 </ul>
 {% endblock %}

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>Wybierz tryb analizy</h2>
+    {% if messages %}
+  <ul>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
+    {% if observation_points %}
+        {% for observation_point in observation_points %}
+            Tutaj wypisać w ramach rozwijanej listy lokalizacje, następnie dodać odnośnik url z parametrem id do widoku związanego z analizą lokalizacji.
+        {% endfor %}
+    {% endif %}
+
+  <a href="{% url 'dashboard' %}">Anuluj</a>
+{% endblock %}

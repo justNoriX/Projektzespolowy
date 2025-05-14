@@ -1,11 +1,18 @@
 {% extends "base.html" %}
 {% block content %}
+    {% if messages %}
+  <ul>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
 <h2>Edytuj lokalizację: {{ observation_point.title }}</h2>
 
 <form method="post">
   {% csrf_token %}
   {{ form.as_p }}
   <button type="submit">Zapisz zmiany</button>
-  <a href="{% url 'observation_points_list' %}">Anuluj</a>
 </form>
+    <a href="{% url 'observation_points_list' %}">Anuluj</a>
 {% endblock %}

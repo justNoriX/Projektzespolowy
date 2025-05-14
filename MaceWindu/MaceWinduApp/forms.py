@@ -65,8 +65,4 @@ class UpdateUserUFLNameForm(forms.ModelForm):
             'first_name': 'Imię',
             'last_name': 'Nazwisko'
         }
-        help_texts = {
-            'username': None,
-            'first_name': None,
-            'last_name':None
-        }
+

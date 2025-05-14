@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from .forms import CustomUserCreationForm, LoginForm, ObservationPointForm, UpdateUserUFLNameForm
-from .models import ObservationPoint
+from .models import ObservationPoint, SnapShot
 
 
 def register_view(request):
@@ -47,14 +47,22 @@ def update_user_ufl_name_view(request):
         form=UpdateUserUFLNameForm(request.POST,instance=user)
         if form.is_valid():
             form.save()
-            return redirect('dashboard')
+            messages.success(request,"Zaktualizowano dane dotyczące profilu")
+            return redirect('profile')
+        else:
+            messages.error(request,"Wystąpiły błędy w formularzu")
+            return render(request, 'update_user_ufl.html', {'form': form})
     else:
         form=UpdateUserUFLNameForm(instance=user)
     return render(request,'update_user_ufl.html',{'form':form})
 @login_required
 def dashboard_view(request):
     return render(request,'dashboard.html',{'user':request.user})
-
+@login_required
+def analysis_choice_view(request):
+    observation_points=ObservationPoint.objects.filter(user=request.user)
+    snapshots=SnapShot.objects.filter(observation_point__user=request.user)
+    return render(request,'analysis_choice.html',{'observation_points':observation_points, 'snapshots':snapshots})
 @login_required
 def profile_view(request):
     return render(request,'profile.html',{'user':request.user})
@@ -73,10 +81,15 @@ def add_observation_point_view(request):
 
     if request.method=="POST":
         form=ObservationPointForm(request.POST)
-        observation_point=form.save(commit=False)
-        observation_point.user=user
-        observation_point.save()
-        return redirect("observation_points_list")
+        if form.is_valid():
+            observation_point=form.save(commit=False)
+            observation_point.user=user
+            observation_point.save()
+            messages.success(request,"Dodano lokalizację")
+            return redirect("observation_points_list")
+        else:
+            messages.error(request,"Wystąpiły błędy w formularzu")
+            return render(request, 'observation_point_form.html', {'form': form})
     else:
         form=ObservationPointForm()
         return render(request,'observation_point_form.html',{'form':form})
@@ -86,6 +99,7 @@ def delete_observation_point_view(request,pk):
     observation_point=get_object_or_404(ObservationPoint,pk=pk,user=request.user)
     if request.method=="POST":
         observation_point.delete()
+        messages.success(request,"Usunięto lokalizację")
         return redirect("observation_points_list")
     return render(request,"delete_observation_point.html",{"observation_point":observation_point})
 
@@ -96,7 +110,12 @@ def update_observation_point_view(request,pk):
         form=ObservationPointForm(request.POST, instance=observation_point)
         if form.is_valid():
             form.save()
+            messages.success(request,"Zaktualizowano lokalizację")
             return redirect("observation_points_list")
+        else:
+            messages.error(request,"Wystąpiły błędy w formularzu")
+            return render(request, "update_observation_point.html",{"form": form, "observation_point": observation_point})
+
     else:
         form=ObservationPointForm(instance=observation_point)
         return render(request,"update_observation_point.html",{"form":form, "observation_point":observation_point})

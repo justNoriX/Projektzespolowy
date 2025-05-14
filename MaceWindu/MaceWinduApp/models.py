@@ -78,6 +78,7 @@ class SnapShot(models.Model):
     description = models.TextField(
         max_length=100
     )
+    snapshot_datetime=models.DateTimeField()
 
 class WindValue(models.Model):
     snapshot = models.ForeignKey(
