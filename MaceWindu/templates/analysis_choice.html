@@ -1,18 +1,35 @@
 {% extends "base.html" %}
 {% block content %}
-  <h2>Wybierz tryb analizy</h2>
-    {% if messages %}
-  <ul>
-    {% for message in messages %}
-      <li>{{ message }}</li>
-    {% endfor %}
-  </ul>
-{% endif %}
+ <h2>Analiza na podstawie lokalizacji</h2>
     {% if observation_points %}
-        {% for observation_point in observation_points %}
-            Tutaj wypisać w ramach rozwijanej listy lokalizacje, następnie dodać odnośnik url z parametrem id do widoku związanego z analizą lokalizacji.
-        {% endfor %}
-    {% endif %}
+<form method="get" action="{% url 'op_analysis' %}">
+    <label for="observation_point_choice">Wybierz lokalizację</label>
+    <select id="observation_point_choice" name="observation_point_id">
+    {% for observation_point in observation_points %}
+      <option value="{{ observation_point.id }}">{{ observation_point.title }}</option>
+        {% empty %}
+    <li>Brak punktów obserwacji</li>
+    {% endfor %}
+  </select>
+  <button type="submit">Analizuj dla wybranej lokalizacji</button>
+</form>
+        {% else %}
+        <h2>Brak lokalizacji do analizy.</h2>
+{% endif %}
+    {% if snapshots %}
+<h2>Analiza na podstawie migawki</h2>
+<form method="get" action="{% url 'snapshot_analysis' %}">
+    <label for="snapshot_choice">Wybierz migawkę</label>
+        <select id="snapshot_choice" name="snapshot_id">
+          {% for snapshot in snapshots %}
+            <option value="{{ snapshot.id }}">{{ snapshot.title }}</option>
+          {% endfor %}
+        </select>
 
+    <button type="submit">Analizuj migawkę</button>
+</form>
+        {% else %}
+        <h2>Brak migawek do analizy</h2>
+    {% endif %}
   <a href="{% url 'dashboard' %}">Anuluj</a>
 {% endblock %}

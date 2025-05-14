@@ -13,7 +13,10 @@ urlpatterns=[
     path('deleteObservationPoint/<int:pk>',views.delete_observation_point_view,name="delete_observation_point"),
     path('updateObservationPoint/<int:pk>',views.update_observation_point_view,name="update_observation_point"),
     path('updateProfile/',views.update_user_ufl_name_view,name="update_user_profile"),
-    path('profile/',views.profile_view,name='profile')
+    path('profile/',views.profile_view,name='profile'),
+    path('analysisChoice/',views.analysis_choice_view,name="analysis_choice"),
+    path('ObservationPointAnalysis/',views.op_analysis_view,name="op_analysis"),
+    path('SnapshotAnalysis/',views.snapshot_analysis_view,name='snapshot_analysis')
 
 
 

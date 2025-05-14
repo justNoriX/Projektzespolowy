@@ -64,6 +64,22 @@ def analysis_choice_view(request):
     snapshots=SnapShot.objects.filter(observation_point__user=request.user)
     return render(request,'analysis_choice.html',{'observation_points':observation_points, 'snapshots':snapshots})
 @login_required
+def op_analysis_view(request):
+    observation_point_id=request.GET.get('observation_point_id')
+    observation_point=get_object_or_404(ObservationPoint,pk=observation_point_id, user=request.user)
+    #TUTAJ KOMUNIKACJA Z ZEWNĘTRZNYM API
+    #TUTAJ ODBYWA SIĘ PARSOWANIE WYNIKU Z API
+    #TUTAJ ODBYWA SIĘ ZAPIS DO SESJI TYCH ODEBRANYCH I SPARSOWANYCH WYNIKÓW
+    #ODEBRANE DANE ZOSTAJĄ PRZEKAZANE DO RENDERU PONIŻEJ
+    return render(request,'op_analysis.html')
+
+@login_required
+def snapshot_analysis_view(request):
+    snapshot_id=request.GET.get('snapshot_id')
+    snapshot=get_object_or_404(SnapShot,pk=snapshot_id,user=request.user)
+    #DO PÓŹNIEJSZEJ IMPLEMENTACJI
+    return render(request,'snapshot_analysis.html')
+@login_required
 def profile_view(request):
     return render(request,'profile.html',{'user':request.user})
 @login_required

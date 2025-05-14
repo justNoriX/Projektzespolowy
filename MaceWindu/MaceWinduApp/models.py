@@ -1,6 +1,7 @@
 from django.core.validators import MinValueValidator, MaxValueValidator, MinLengthValidator
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.db.models.functions import Now
 from django.utils.translation import gettext_lazy as _
 
 class CustomUser(AbstractUser):
@@ -78,14 +79,14 @@ class SnapShot(models.Model):
     description = models.TextField(
         max_length=100
     )
-    snapshot_datetime=models.DateTimeField()
+    snapshot_date=models.DateField(db_default=Now())
 
 class WindValue(models.Model):
     snapshot = models.ForeignKey(
         SnapShot,
         on_delete=models.CASCADE
     )
-    date = models.DateField()
+    time = models.TimeField(db_default=Now())
     wind_direction = models.IntegerField()
     speed_value = models.FloatField()
     gust_value = models.FloatField()

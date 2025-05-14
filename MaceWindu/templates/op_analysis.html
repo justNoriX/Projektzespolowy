@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>TYLKO DO TESTÓW</h2>
+
+<ul>
+
+    <li>
+      <strong>{{ observation_point.title }}</strong><br>
+      Opis: {{ observation_point.description }}<br>
+      Lokalizacja: {{ observation_point.latitude }}, {{ observation_point.longitude }}<br>
+      Koszt energii: {{ observation_point.energyCostPerKWh }} zł/kWh
+
+    </li>
+
+</ul>
+{% endblock %}
