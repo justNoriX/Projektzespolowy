@@ -1,7 +1,12 @@
+from django.contrib.auth.views import PasswordChangeView
+from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
+from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
+
 from .forms import CustomUserCreationForm, LoginForm, ObservationPointForm, UpdateUserUFLNameForm
 from .models import ObservationPoint, SnapShot
 
@@ -55,6 +60,14 @@ def update_user_ufl_name_view(request):
     else:
         form=UpdateUserUFLNameForm(instance=user)
     return render(request,'update_user_ufl.html',{'form':form})
+
+@method_decorator(login_required,name='dispatch')
+class CustomPasswordChangeView(SuccessMessageMixin,PasswordChangeView):
+    template_name = 'password_change_form.html'
+    success_url = reverse_lazy('dashboard')
+    success_message = "Hasło zostało zmienione pomyślnie"
+
+
 @login_required
 def dashboard_view(request):
     return render(request,'dashboard.html',{'user':request.user})
