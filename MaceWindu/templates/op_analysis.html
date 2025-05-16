@@ -1,46 +1,85 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-  <meta charset="UTF-8" />
-  <title>Kalkulator mocy turbiny wiatrowej</title>
+  <meta charset="UTF-8">
+  <title>MaceWindu Calculator</title>
   <style>
     body { font-family: Arial, sans-serif; padding: 20px; max-width: 500px; margin: auto; }
     label, input { display: block; margin-top: 10px; }
-    input[type="number"] { width: 100%; padding: 8px; }
+    input[type="number"] { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+    input.invalid { border-color: red; background-color: #ffe5e5; }
     button { margin-top: 15px; padding: 10px 15px; }
     #result { margin-top: 20px; font-weight: bold; }
+    .error { color: red; font-size: 0.9em; }
   </style>
 </head>
 <body>
-  <h2>Kalkulator mocy turbiny wiatrowej</h2>
+  <h2>MaceWindu Calculator</h2>
 
   <label for="bladeLength">Długość łopat [m]</label>
-  <input type="number" id="bladeLength" step="0.1" required>
+  <input type="number" id="bladeLength" step="0.1">
+  <div class="error" id="bladeLengthError"></div>
 
-  <label for="efficiency">Całkowita sprawność (ηm * ηel * Cp) [0-1]</label>
-  <input type="number" id="efficiency" step="0.01" required>
+  <label for="efficiency">Całkowita sprawność turbiny (ηm * ηel * Cp) [0–1]</label>
+  <input type="number" id="efficiency" step="0.01">
+  <div class="error" id="efficiencyError"></div>
 
   <label for="windSpeed">Prędkość wiatru [m/s]</label>
-  <input type="number" id="windSpeed" step="0.1" required>
+  <input type="number" id="windSpeed" step="0.1">
+  <div class="error" id="windSpeedError"></div>
 
   <button onclick="calculatePower()">Oblicz moc</button>
 
   <div id="result"></div>
 
   <script>
-    function calculatePower() {
-      const rho = 1.225; // gęstość powietrza [kg/m^3]
-      const bladeLength = parseFloat(document.getElementById("bladeLength").value);
-      const efficiency = parseFloat(document.getElementById("efficiency").value);
-      const windSpeed = parseFloat(document.getElementById("windSpeed").value);
 
-      if (isNaN(bladeLength) || isNaN(efficiency) || isNaN(windSpeed)) {
-        document.getElementById("result").innerText = "Wprowadź poprawne wartości.";
+
+    function calculatePower() {
+      const rho = 1.225;
+      const bladeLengthInput = document.getElementById("bladeLength");
+      const efficiencyInput = document.getElementById("efficiency");
+      const windSpeedInput = document.getElementById("windSpeed");
+
+      const bladeLength = parseFloat(bladeLengthInput.value);
+      const efficiency = parseFloat(efficiencyInput.value);
+      const windSpeed = parseFloat(windSpeedInput.value);
+
+      let valid = true;
+
+      // Reset błędów
+      [bladeLengthInput, efficiencyInput, windSpeedInput].forEach(el => el.classList.remove('invalid'));
+      ['bladeLengthError', 'efficiencyError', 'windSpeedError'].forEach(id => document.getElementById(id).innerText = '');
+
+      // Walidacja długości łopat
+      if (isNaN(bladeLength) || bladeLength <= 0) {
+        bladeLengthInput.classList.add('invalid');
+        document.getElementById('bladeLengthError').innerText = "Podaj dodatnią długość łopat.";
+        valid = false;
+      }
+
+      // Walidacja sprawności
+      if (isNaN(efficiency) || efficiency <= 0 || efficiency > 1) {
+        efficiencyInput.classList.add('invalid');
+        document.getElementById('efficiencyError').innerText = "Sprawność musi być liczbą z przedziału (0–1].";
+        valid = false;
+      }
+
+      // Walidacja prędkości wiatru
+      if (isNaN(windSpeed) || windSpeed <= 0) {
+        windSpeedInput.classList.add('invalid');
+        document.getElementById('windSpeedError').innerText = "Podaj dodatnią prędkość wiatru.";
+        valid = false;
+      }
+
+      if (!valid) {
+        document.getElementById("result").innerText = "";
         return;
       }
 
-      const area = Math.PI * Math.pow(bladeLength, 2); // powierzchnia A = π * r^2
-      const power = 0.5 * rho * area * Math.pow(windSpeed, 3) * efficiency; // wzór z obrazka
+      // Obliczenia
+      const area = Math.PI * Math.pow(bladeLength, 2);
+      const power = 0.5 * rho * area * Math.pow(windSpeed, 3) * efficiency;
 
       document.getElementById("result").innerText = `Moc wiatru: ${power.toFixed(2)/1000} kW`;
     }
