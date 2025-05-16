@@ -20,7 +20,7 @@
   <input type="number" id="bladeLength" step="0.1">
   <div class="error" id="bladeLengthError"></div>
 
-  <label for="efficiency">Całkowita sprawność turbiny (ηm * ηel * Cp) [0–1]</label>
+  <label for="efficiency">Całkowita sprawność turbiny w procentach</label>
   <input type="number" id="efficiency" step="0.01">
   <div class="error" id="efficiencyError"></div>
 
@@ -33,7 +33,6 @@
   <div id="result"></div>
 
   <script>
-
 
     function calculatePower() {
       const rho = 1.225;
@@ -59,9 +58,9 @@
       }
 
       // Walidacja sprawności
-      if (isNaN(efficiency) || efficiency <= 0 || efficiency > 1) {
+      if (isNaN(efficiency) || efficiency <= 0 || efficiency > 100) {
         efficiencyInput.classList.add('invalid');
-        document.getElementById('efficiencyError').innerText = "Sprawność musi być liczbą z przedziału (0–1].";
+        document.getElementById('efficiencyError').innerText = "Sprawność musi być liczbą z przedziału (0–100].";
         valid = false;
       }
 
@@ -79,7 +78,7 @@
 
       // Obliczenia
       const area = Math.PI * Math.pow(bladeLength, 2);
-      const power = 0.5 * rho * area * Math.pow(windSpeed, 3) * efficiency;
+      const power = 0.5 * rho * area * Math.pow(windSpeed, 3) * efficiency/100;
 
       document.getElementById("result").innerText = `Moc wiatru: ${power.toFixed(2)/1000} kW`;
     }
