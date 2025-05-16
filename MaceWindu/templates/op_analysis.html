@@ -1,16 +1,49 @@
-{% extends "base.html" %}
-{% block content %}
-<h2>TYLKO DO TESTÓW</h2>
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <title>Kalkulator mocy turbiny wiatrowej</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; max-width: 500px; margin: auto; }
+    label, input { display: block; margin-top: 10px; }
+    input[type="number"] { width: 100%; padding: 8px; }
+    button { margin-top: 15px; padding: 10px 15px; }
+    #result { margin-top: 20px; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h2>Kalkulator mocy turbiny wiatrowej</h2>
 
-<ul>
+  <label for="bladeLength">Długość łopat [m]</label>
+  <input type="number" id="bladeLength" step="0.1" required>
 
-    <li>
-      <strong>{{ observation_point.title }}</strong><br>
-      Opis: {{ observation_point.description }}<br>
-      Lokalizacja: {{ observation_point.latitude }}, {{ observation_point.longitude }}<br>
-      Koszt energii: {{ observation_point.energyCostPerKWh }} zł/kWh
+  <label for="efficiency">Całkowita sprawność (ηm * ηel * Cp) [0-1]</label>
+  <input type="number" id="efficiency" step="0.01" required>
 
-    </li>
+  <label for="windSpeed">Prędkość wiatru [m/s]</label>
+  <input type="number" id="windSpeed" step="0.1" required>
 
-</ul>
-{% endblock %}
+  <button onclick="calculatePower()">Oblicz moc</button>
+
+  <div id="result"></div>
+
+  <script>
+    function calculatePower() {
+      const rho = 1.225; // gęstość powietrza [kg/m^3]
+      const bladeLength = parseFloat(document.getElementById("bladeLength").value);
+      const efficiency = parseFloat(document.getElementById("efficiency").value);
+      const windSpeed = parseFloat(document.getElementById("windSpeed").value);
+
+      if (isNaN(bladeLength) || isNaN(efficiency) || isNaN(windSpeed)) {
+        document.getElementById("result").innerText = "Wprowadź poprawne wartości.";
+        return;
+      }
+
+      const area = Math.PI * Math.pow(bladeLength, 2); // powierzchnia A = π * r^2
+      const power = 0.5 * rho * area * Math.pow(windSpeed, 3) * efficiency; // wzór z obrazka
+
+      document.getElementById("result").innerText = `Moc wiatru: ${power.toFixed(2)/1000} kW`;
+    }
+  </script>
+</body>
+</html>
