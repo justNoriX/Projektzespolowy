@@ -1,3 +1,5 @@
+from django.contrib.auth.models import User
+from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.views import PasswordChangeView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import render, redirect, get_object_or_404
@@ -6,19 +8,27 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
+from django.contrib.sites.shortcuts import get_current_site
+from django.utils.http import urlsafe_base64_decode
+from .mailsender import send_verification_mail
 
 from .forms import CustomUserCreationForm, LoginForm, ObservationPointForm, UpdateUserUFLNameForm
-from .models import ObservationPoint, SnapShot
+from .models import ObservationPoint, SnapShot, CustomUser
 
 
 def register_view(request):
     if request.method=="POST":
         form=CustomUserCreationForm(request.POST)
         if form.is_valid():
-            user=form.save()
-            login(request, user)
-            messages.success(request,"Poprawnie zarejestrowano konto w systemie.")
-            return redirect("dashboard")
+            user=form.save(commit=False)
+            user.is_active=False
+            user.is_staff=False
+            user.is_superuser=False
+            user.save()
+            current_site=get_current_site(request)
+            send_verification_mail(user,current_site)
+            messages.success(request,"Poprawnie zarejestrowano konto w systemie. Przed zalogowaniem zweryfikuj konto poprzez link wysłany na adres e-mail")
+            return redirect("login")
         else:
             messages.error(request,"Wystąpiły błędy w formularzu.")
             return render(request, 'register.html',{'form':form})
@@ -26,6 +36,19 @@ def register_view(request):
         form=CustomUserCreationForm()
         return render(request,'register.html',{'form':form})
 
+def activate_account_view(request, uid, token):
+    try:
+        uid=urlsafe_base64_decode(uid).decode()
+        user=CustomUser.objects.get(pk=uid)
+    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user=None
+    if user is not None and default_token_generator.check_token(user, token):
+        user.is_active=True
+        user.save()
+        messages.success(request, 'Konto zostało aktywowane. Możesz się teraz zalogować.')
+    else:
+        messages.error(request,"Link jest nieprawidłowy lub wygasł.")
+    return redirect('login')
 def login_view(request):
     if request.method=="POST":
         form=LoginForm(request.POST)

@@ -6,6 +6,7 @@ urlpatterns=[
     path('', RedirectView.as_view(url='/MaceWindu/dashboard/', permanent=False)),
     path('register/', views.register_view,name="register"),
     path('login/', views.login_view, name='login'),
+    path('activate/<uid>/<token>/',views.activate_account_view,name='activate_account'),
     path('logout/', views.logout_view, name='logout'),
     path('dashboard/', views.dashboard_view, name='dashboard'),
     path('observationPoints/',views.user_observation_points_view,name='observation_points_list'),

@@ -34,6 +34,8 @@ class LoginForm(forms.Form):
             user=authenticate(username=user_object.email,password=password)
             if user is None:
                 raise forms.ValidationError("Adres e-mail lub hasło nie są prawidłowe")
+            elif not user.is_active:
+                raise forms.ValidationError("Konto nie zostało zweryfikowane poprzez wiadomość email")
             self.user=user
         return cleaned_data
     def get_user(self):
