@@ -18,25 +18,44 @@ class CustomUserCreationForm(UserCreationForm):
 class LoginForm(forms.Form):
     def __init__(self, *args, **kwargs):
         self.user = None
-        super().__init__(*args,**kwargs)
+        super().__init__(*args, **kwargs)
 
-    email = forms.EmailField(required=True, label="Adres e-mail")
-    password=forms.CharField(required=True,label="Hasło",widget=forms.PasswordInput)
+    email = forms.EmailField(
+        required=True,
+        label="Adres e-mail",
+        widget=forms.EmailInput(attrs={
+            "class": "w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500",
+            "placeholder": "Wprowadź adres e-mail"
+        })
+    )
+
+    password = forms.CharField(
+        required=True,
+        label="Hasło",
+        widget=forms.PasswordInput(attrs={
+            "class": "w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500",
+            "placeholder": "Wprowadź hasło"
+        })
+    )
+
     def clean(self):
-        cleaned_data=super().clean()
-        email=cleaned_data.get('email')
-        password=cleaned_data.get('password')
+        cleaned_data = super().clean()
+        email = cleaned_data.get('email')
+        password = cleaned_data.get('password')
 
         if email and password:
             try:
-                user_object=CustomUser.objects.get(email=email)
+                user_object = CustomUser.objects.get(email=email)
             except CustomUser.DoesNotExist:
                 raise forms.ValidationError("Adres e-mail lub hasło nie są prawidłowe")
-            user=authenticate(username=user_object.email,password=password)
+
+            user = authenticate(username=user_object.email, password=password)
             if user is None:
                 raise forms.ValidationError("Adres e-mail lub hasło nie są prawidłowe")
-            self.user=user
+
+            self.user = user
         return cleaned_data
+
     def get_user(self):
         return self.user
 

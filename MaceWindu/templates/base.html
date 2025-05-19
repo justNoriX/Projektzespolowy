@@ -1,12 +1,34 @@
+<!--
+  Podstawowy szablon z nagłówkiem aplikacji.
+  - Tailwind CSS przez CDN (można też użyć skompilowanego pliku CSS).
+  - Ustawiono meta viewport dla responsywności.
+  - Body z jasnoszarym tłem (klasa bg-gray-100) dla kontrastu.
+-->
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Włączenie Tailwind CSS z CDN (alternatywnie: {% load static %} + link do pliku CSS) -->
+  <script src="https://cdn.tailwindcss.com"></script>
   <title>MaceWindu</title>
-
 </head>
-<body>
-<a href="{% url 'dashboard' %}"><h1>MaceWindu</h1></a>
-  {% block content %}{% endblock %}
+<body class="bg-gray-100">
+
+  <!-- Nagłówek aplikacji -->
+  <header class="bg-white shadow">
+    <div class="container mx-auto py-4 px-6">
+      <!-- Nazwa/logo aplikacji. Używamy dużego, pogrubionego fontu i indygo koloru. -->
+      <h1 class="text-2xl font-bold text-indigo-700">MaceWindu</h1>
+    </div>
+  </header>
+
+  <!-- Główny kontener treści (blok do rozszerzania w podszablonach) -->
+  <main class="container mx-auto px-6 py-8">
+    {% block content %}
+    {% endblock %}
+  </main>
+
 </body>
 </html>
+
