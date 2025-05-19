@@ -19,6 +19,8 @@ class LoginForm(forms.Form):
         self.user = None
         super().__init__(*args, **kwargs)
 
+    # Poniższe inputy od razu ładnie wystylowane.
+
     email = forms.EmailField(
         required=True,
         label="Adres e-mail",
