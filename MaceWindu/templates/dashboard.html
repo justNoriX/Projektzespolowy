@@ -1,13 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
   <h2>Witaj, {{ user.username }}!</h2>
-    {% if messages %}
-  <ul>
-    {% for message in messages %}
-      <li>{{ message }}</li>
-    {% endfor %}
-  </ul>
-{% endif %}
+
     <a href="{% url 'analysis_choice' %}">Dokonaj analizy</a>
 <a href="{% url 'profile' %}">Profil użytkownika</a>
     <a href="{% url 'observation_points_list' %}">Wypisz lokalizacje</a>

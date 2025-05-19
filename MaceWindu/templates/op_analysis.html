@@ -1,16 +1,87 @@
-{% extends "base.html" %}
-{% block content %}
-<h2>TYLKO DO TESTÓW</h2>
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>MaceWindu Calculator</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; max-width: 500px; margin: auto; }
+    label, input { display: block; margin-top: 10px; }
+    input[type="number"] { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+    input.invalid { border-color: red; background-color: #ffe5e5; }
+    button { margin-top: 15px; padding: 10px 15px; }
+    #result { margin-top: 20px; font-weight: bold; }
+    .error { color: red; font-size: 0.9em; }
+  </style>
+</head>
+<body>
+  <h2>MaceWindu Calculator</h2>
 
-<ul>
+  <label for="bladeLength">Długość łopat [m]</label>
+  <input type="number" id="bladeLength" step="0.1">
+  <div class="error" id="bladeLengthError"></div>
 
-    <li>
-      <strong>{{ observation_point.title }}</strong><br>
-      Opis: {{ observation_point.description }}<br>
-      Lokalizacja: {{ observation_point.latitude }}, {{ observation_point.longitude }}<br>
-      Koszt energii: {{ observation_point.energyCostPerKWh }} zł/kWh
+  <label for="efficiency">Całkowita sprawność turbiny w procentach</label>
+  <input type="number" id="efficiency" step="0.01">
+  <div class="error" id="efficiencyError"></div>
 
-    </li>
+  <label for="windSpeed">Prędkość wiatru [m/s]</label>
+  <input type="number" id="windSpeed" step="0.1">
+  <div class="error" id="windSpeedError"></div>
 
-</ul>
-{% endblock %}
+  <button onclick="calculatePower()">Oblicz moc</button>
+
+  <div id="result"></div>
+
+  <script>
+
+    function calculatePower() {
+      const rho = 1.225;
+      const bladeLengthInput = document.getElementById("bladeLength");
+      const efficiencyInput = document.getElementById("efficiency");
+      const windSpeedInput = document.getElementById("windSpeed");
+
+      const bladeLength = parseFloat(bladeLengthInput.value);
+      const efficiency = parseFloat(efficiencyInput.value);
+      const windSpeed = parseFloat(windSpeedInput.value);
+
+      let valid = true;
+
+      // Reset błędów
+      [bladeLengthInput, efficiencyInput, windSpeedInput].forEach(el => el.classList.remove('invalid'));
+      ['bladeLengthError', 'efficiencyError', 'windSpeedError'].forEach(id => document.getElementById(id).innerText = '');
+
+      // Walidacja długości łopat
+      if (isNaN(bladeLength) || bladeLength <= 0) {
+        bladeLengthInput.classList.add('invalid');
+        document.getElementById('bladeLengthError').innerText = "Podaj dodatnią długość łopat.";
+        valid = false;
+      }
+
+      // Walidacja sprawności
+      if (isNaN(efficiency) || efficiency <= 0 || efficiency > 100) {
+        efficiencyInput.classList.add('invalid');
+        document.getElementById('efficiencyError').innerText = "Sprawność musi być liczbą z przedziału (0–100].";
+        valid = false;
+      }
+
+      // Walidacja prędkości wiatru
+      if (isNaN(windSpeed) || windSpeed <= 0) {
+        windSpeedInput.classList.add('invalid');
+        document.getElementById('windSpeedError').innerText = "Podaj dodatnią prędkość wiatru.";
+        valid = false;
+      }
+
+      if (!valid) {
+        document.getElementById("result").innerText = "";
+        return;
+      }
+
+      // Obliczenia
+      const area = Math.PI * Math.pow(bladeLength, 2);
+      const power = 0.5 * rho * area * Math.pow(windSpeed, 3) * efficiency/100;
+
+      document.getElementById("result").innerText = `Moc wiatru: ${power.toFixed(2)/1000} kW`;
+    }
+  </script>
+</body>
+</html>

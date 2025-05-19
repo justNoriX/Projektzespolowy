@@ -1,13 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-    {% if messages %}
-  <ul>
-    {% for message in messages %}
-      <li>{{ message }}</li>
-    {% endfor %}
-  </ul>
-{% endif %}
-  <h2>Register form</h2>
+  <h2>Rejestracja</h2>
   <form method="post">
     {% csrf_token %}
     {{ form.as_p }}

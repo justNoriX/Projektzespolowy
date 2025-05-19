@@ -14,7 +14,6 @@ class CustomUserCreationForm(UserCreationForm):
         model=CustomUser
         fields=['username','first_name','last_name','email','password1','password2']
 
-
 class LoginForm(forms.Form):
     def __init__(self, *args, **kwargs):
         self.user = None
@@ -52,8 +51,9 @@ class LoginForm(forms.Form):
             user = authenticate(username=user_object.email, password=password)
             if user is None:
                 raise forms.ValidationError("Adres e-mail lub hasło nie są prawidłowe")
-
-            self.user = user
+            elif not user.is_active:
+                raise forms.ValidationError("Konto nie zostało zweryfikowane poprzez wiadomość email")
+            self.user=user
         return cleaned_data
 
     def get_user(self):

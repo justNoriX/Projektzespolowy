@@ -1,13 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
 <h2>Twoje lokalizacje</h2>
-    {% if messages %}
-  <ul>
-    {% for message in messages %}
-      <li>{{ message }}</li>
-    {% endfor %}
-  </ul>
-{% endif %}
 <ul>
   {% for observation_point in observation_points %}
     <li>

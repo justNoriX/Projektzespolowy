@@ -25,10 +25,16 @@
 
   <!-- Główny kontener treści (blok do rozszerzania w podszablonach) -->
   <main class="container mx-auto px-6 py-8">
-    {% block content %}
+    {% if messages %}
+  <ul>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
+  {%block content %}
     {% endblock %}
   </main>
-
 </body>
 </html>
 
