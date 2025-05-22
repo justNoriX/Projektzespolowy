@@ -123,7 +123,7 @@ def op_analysis_view(request):
         )
 
     return render(request, 'op_analysis.html', {
-        "weather_data": data,
+        "weather_data": simplified_data,
         "observation_point": observation_point
     })
 
