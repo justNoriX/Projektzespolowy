@@ -2,6 +2,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.views import PasswordChangeView
 from django.contrib.messages.views import SuccessMessageMixin
+from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import login, logout
@@ -14,6 +15,8 @@ from .mailsender import send_verification_mail
 
 from .forms import CustomUserCreationForm, LoginForm, ObservationPointForm, UpdateUserUFLNameForm
 from .models import ObservationPoint, SnapShot, CustomUser
+from .services.weather_service import GoogleWeatherService, parse_weather_response
+
 
 
 def register_view(request):
@@ -99,15 +102,30 @@ def analysis_choice_view(request):
     observation_points=ObservationPoint.objects.filter(user=request.user)
     snapshots=SnapShot.objects.filter(observation_point__user=request.user)
     return render(request,'analysis_choice.html',{'observation_points':observation_points, 'snapshots':snapshots})
+
 @login_required
 def op_analysis_view(request):
     observation_point_id=request.GET.get('observation_point_id')
     observation_point=get_object_or_404(ObservationPoint,pk=observation_point_id, user=request.user)
-    #TUTAJ KOMUNIKACJA Z ZEWNĘTRZNYM API
-    #TUTAJ ODBYWA SIĘ PARSOWANIE WYNIKU Z API
-    #TUTAJ ODBYWA SIĘ ZAPIS DO SESJI TYCH ODEBRANYCH I SPARSOWANYCH WYNIKÓW
-    #ODEBRANE DANE ZOSTAJĄ PRZEKAZANE DO RENDERU PONIŻEJ
-    return render(request,'op_analysis.html')
+
+    lat = float(observation_point.latitude)
+    lon = float(observation_point.longitude)
+
+    try:
+        data = GoogleWeatherService.get_hourly_history(lat, lon)
+        simplified_data = parse_weather_response(data)
+        # print(simplified_data)
+
+    except Exception as e:
+        return JsonResponse(
+            {"error": "Nie udało się pobrać danych pogodowych", "details": str(e)},
+            status=500,
+        )
+
+    return render(request, 'op_analysis.html', {
+        "weather_data": data,
+        "observation_point": observation_point
+    })
 
 @login_required
 def snapshot_analysis_view(request):

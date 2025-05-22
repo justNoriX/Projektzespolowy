@@ -3,3 +3,4 @@ bandit
 safety
 django-environ~=0.12.0
 mysqlclient~=2.2.7
+requests>=2.28
