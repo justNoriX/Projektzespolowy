@@ -1,39 +1,45 @@
-<!DOCTYPE html>
-<html lang="pl">
-<head>
-  <meta charset="UTF-8">
-  <title>MaceWindu Calculator</title>
-  <style>
-    body { font-family: Arial, sans-serif; padding: 20px; max-width: 500px; margin: auto; }
-    label, input { display: block; margin-top: 10px; }
-    input[type="number"] { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
-    input.invalid { border-color: red; background-color: #ffe5e5; }
-    button { margin-top: 15px; padding: 10px 15px; }
-    #result { margin-top: 20px; font-weight: bold; }
-    .error { color: red; font-size: 0.9em; }
-  </style>
-</head>
-<body>
-  <h2>MaceWindu Calculator</h2>
+{% extends "base.html" %}
+{% block content %}
+  <div class="max-w-xl mx-auto bg-white shadow-lg rounded-lg p-6">
+    <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">MaceWindu Calculator</h2>
 
-  <label for="bladeLength">Długość łopat [m]</label>
-  <input type="number" id="bladeLength" step="0.1">
-  <div class="error" id="bladeLengthError"></div>
+    <div class="space-y-4">
+      <div>
+        <label for="bladeLength" class="block text-sm font-medium text-gray-700">Długość łopat [m]</label>
+        <input type="number" id="bladeLength" step="0.1"
+               class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+        <div class="text-red-500 text-sm mt-1" id="bladeLengthError"></div>
+      </div>
 
-  <label for="efficiency">Całkowita sprawność turbiny w procentach</label>
-  <input type="number" id="efficiency" step="0.01">
-  <div class="error" id="efficiencyError"></div>
+      <div>
+        <label for="efficiency" class="block text-sm font-medium text-gray-700">Całkowita sprawność turbiny w procentach</label>
+        <input type="number" id="efficiency" step="0.01"
+               class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+        <div class="text-red-500 text-sm mt-1" id="efficiencyError"></div>
+      </div>
 
-  <label for="windSpeed">Prędkość wiatru [m/s]</label>
-  <input type="number" id="windSpeed" step="0.1">
-  <div class="error" id="windSpeedError"></div>
+      <div>
+        <label for="windSpeed" class="block text-sm font-medium text-gray-700">Prędkość wiatru [m/s]</label>
+        <input type="number" id="windSpeed" step="0.1"
+               class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+        <div class="text-red-500 text-sm mt-1" id="windSpeedError"></div>
+      </div>
 
-  <button onclick="calculatePower()">Oblicz moc</button>
+      <button onclick="calculatePower()"
+              class="w-full bg-indigo-600 text-white py-2 px-4 rounded hover:bg-indigo-700 transition">
+        Oblicz moc
+      </button>
 
-  <div id="result"></div>
+      <a href="{% url 'analysis_choice' %}"
+         class="block w-full text-center bg-red-500 text-white py-2 px-4 rounded hover:bg-gray-600 transition">
+         Anuluj
+      </a>
+
+      <div id="result" class="text-center font-semibold text-gray-800 text-lg mt-4"></div>
+    </div>
+  </div>
 
   <script>
-
     function calculatePower() {
       const rho = 1.225;
       const bladeLengthInput = document.getElementById("bladeLength");
@@ -47,26 +53,26 @@
       let valid = true;
 
       // Reset błędów
-      [bladeLengthInput, efficiencyInput, windSpeedInput].forEach(el => el.classList.remove('invalid'));
+      [bladeLengthInput, efficiencyInput, windSpeedInput].forEach(el => el.classList.remove('border-red-500', 'bg-red-100'));
       ['bladeLengthError', 'efficiencyError', 'windSpeedError'].forEach(id => document.getElementById(id).innerText = '');
 
       // Walidacja długości łopat
       if (isNaN(bladeLength) || bladeLength <= 0) {
-        bladeLengthInput.classList.add('invalid');
+        bladeLengthInput.classList.add('border-red-500', 'bg-red-100');
         document.getElementById('bladeLengthError').innerText = "Podaj dodatnią długość łopat.";
         valid = false;
       }
 
       // Walidacja sprawności
       if (isNaN(efficiency) || efficiency <= 0 || efficiency > 100) {
-        efficiencyInput.classList.add('invalid');
+        efficiencyInput.classList.add('border-red-500', 'bg-red-100');
         document.getElementById('efficiencyError').innerText = "Sprawność musi być liczbą z przedziału (0–100].";
         valid = false;
       }
 
       // Walidacja prędkości wiatru
       if (isNaN(windSpeed) || windSpeed <= 0) {
-        windSpeedInput.classList.add('invalid');
+        windSpeedInput.classList.add('border-red-500', 'bg-red-100');
         document.getElementById('windSpeedError').innerText = "Podaj dodatnią prędkość wiatru.";
         valid = false;
       }
@@ -80,8 +86,7 @@
       const area = Math.PI * Math.pow(bladeLength, 2);
       const power = 0.5 * rho * area * Math.pow(windSpeed, 3) * efficiency/100;
 
-      document.getElementById("result").innerText = `Moc wiatru: ${power.toFixed(2)/1000} kW`;
+      document.getElementById("result").innerText = `Moc wiatru: ${(power / 1000).toFixed(2)} kW`;
     }
   </script>
-</body>
-</html>
+{% endblock %}

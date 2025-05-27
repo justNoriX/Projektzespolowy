@@ -1,10 +1,21 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Dodaj lokalizację</h2>
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Zapisz</button>
-</form>
-    <a href="{% url 'observation_points_list' %}">Anuluj</a>
+  <div class="max-w-xl mx-auto mt-20 bg-white shadow-md p-8 rounded">
+    <h2 class="text-2xl font-semibold mb-6 text-center">Dodaj lokalizację</h2>
+
+    <form method="post" class="space-y-4">
+      {% csrf_token %}
+      {{ form.as_p }}
+
+      <div class="flex justify-between gap-4 mt-6">
+        <button type="submit" class="w-full bg-indigo-600 text-white py-2 px-4 rounded hover:bg-indigo-700 transition">
+          Zapisz
+        </button>
+        <a href="{% url 'observation_points_list' %}"
+           class="w-full bg-red-500 text-white py-2 px-4 rounded hover:bg-gray-400 transition text-center">
+           Anuluj
+        </a>
+      </div>
+    </form>
+  </div>
 {% endblock %}

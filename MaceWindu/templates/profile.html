@@ -1,9 +1,29 @@
 {% extends "base.html" %}
 {% block content %}
-  <p>Nazwa użytkownika: {{ user.username }}</p>
-  <p>Email: {{ user.email }}</p>
-  <p>Imię oraz nazwisko: {{ user.first_name }} {{ user.last_name }}</p>
-    <a href="{% url 'update_user_profile' %}">Zaktualizuj nazwę użytkownika, imię oraz nazwisko</a>
-    <a href="{% url 'password_change' %}">Zmień hasło</a>
-  <a href="{% url 'logout' %}">Wyloguj</a>
+  <div class="max-w-xl mx-auto mt-20 bg-white shadow-md p-8 rounded">
+    <h2 class="text-2xl font-semibold mb-6 text-center">Profil użytkownika</h2>
+
+    <div class="space-y-4 mb-6 text-gray-800">
+      <p><span class="font-medium">Nazwa użytkownika:</span> {{ user.username }}</p>
+      <p><span class="font-medium">Email:</span> {{ user.email }}</p>
+      <p><span class="font-medium">Imię oraz nazwisko:</span> {{ user.first_name }} {{ user.last_name }}</p>
+    </div>
+
+    <div class="flex flex-col gap-4">
+      <a href="{% url 'update_user_profile' %}"
+         class="bg-indigo-600 text-white py-2 px-4 rounded hover:bg-indigo-700 transition text-center">
+         Zaktualizuj dane
+      </a>
+
+      <a href="{% url 'password_change' %}"
+         class="bg-indigo-600 text-white py-2 px-4 rounded hover:bg-indigo-700 transition text-center">
+         Zmień hasło
+      </a>
+
+      <a href="{% url 'dashboard' %}"
+         class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 transition text-center">
+         Powrót
+      </a>
+    </div>
+  </div>
 {% endblock %}

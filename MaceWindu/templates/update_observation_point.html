@@ -1,11 +1,22 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Edytuj lokalizację: {{ observation_point.title }}</h2>
+  <div class="max-w-xl mx-auto bg-white shadow-md rounded-lg p-6">
+    <h2 class="text-xl font-semibold text-gray-800 mb-6 text-center">
+      Edytuj lokalizację: <span class="text-indigo-600">{{ observation_point.title }}</span>
+    </h2>
 
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Zapisz zmiany</button>
-</form>
-    <a href="{% url 'observation_points_list' %}">Anuluj</a>
+    <form method="post" class="space-y-4">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit"
+              class="w-full bg-indigo-600 text-white py-2 px-4 rounded hover:bg-indigo-700 transition">
+        Zapisz zmiany
+      </button>
+    </form>
+
+    <a href="{% url 'observation_points_list' %}"
+       class="mt-4 inline-block w-full text-center bg-red-500 text-white py-2 px-4 rounded hover:bg-gray-300 transition">
+      Anuluj
+    </a>
+  </div>
 {% endblock %}

@@ -1,10 +1,18 @@
 {% extends "base.html" %}
 {% block content %}
-  <h2>Rejestracja</h2>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Zarejestruj się</button>
-  </form>
-  <p>Masz już konto?<a href="{% url 'login' %}">Zaloguj się</a></p>
+  <div class="max-w-md mx-auto mt-20 bg-white shadow-md p-8 rounded">
+    <h2 class="text-2xl font-semibold mb-6 text-center">Rejestracja</h2>
+    <form method="post" class="space-y-4">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="w-full bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700 transition">
+        Zarejestruj się
+      </button>
+    </form>
+    <p class="mt-4 text-center text-sm">
+      Masz już konto?
+      <a href="{% url 'login' %}" class="text-indigo-600 hover:underline">Zaloguj się</a>
+    </p>
+  </div>
 {% endblock %}
+

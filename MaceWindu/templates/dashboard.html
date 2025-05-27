@@ -1,9 +1,29 @@
 {% extends "base.html" %}
 {% block content %}
-  <h2>Witaj, {{ user.username }}!</h2>
+  <div class="max-w-2xl mx-auto mt-20 bg-white shadow-md p-8 rounded text-center">
+    <h2 class="text-2xl font-semibold mb-6">Witaj, {{ user.username }}!</h2>
 
-    <a href="{% url 'analysis_choice' %}">Dokonaj analizy</a>
-<a href="{% url 'profile' %}">Profil użytkownika</a>
-    <a href="{% url 'observation_points_list' %}">Wypisz lokalizacje</a>
-  <a href="{% url 'logout' %}">Wyloguj</a>
+    <div class="flex flex-col gap-4">
+      <a href="{% url 'analysis_choice' %}"
+         class="bg-indigo-600 text-white py-2 px-4 rounded hover:bg-indigo-700 transition">
+         Dokonaj analizy
+      </a>
+
+      <a href="{% url 'profile' %}"
+         class="bg-indigo-600 text-white py-2 px-4 rounded hover:bg-indigo-700 transition">
+         Profil użytkownika
+      </a>
+
+      <a href="{% url 'observation_points_list' %}"
+         class="bg-indigo-600 text-white py-2 px-4 rounded hover:bg-indigo-700 transition">
+         Wypisz lokalizacje
+      </a>
+
+      <a href="{% url 'logout' %}"
+         class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 transition">
+         Wyloguj
+      </a>
+    </div>
+  </div>
 {% endblock %}
+

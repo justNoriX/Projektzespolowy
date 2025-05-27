@@ -1,19 +1,45 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Twoje lokalizacje</h2>
-<ul>
-  {% for observation_point in observation_points %}
-    <li>
-      <strong>{{ observation_point.title }}</strong><br>
-      Opis: {{ observation_point.description }}<br>
-      Lokalizacja: {{ observation_point.latitude }}, {{ observation_point.longitude }}<br>
-      Koszt energii: {{ observation_point.energyCostPerKWh }} zł/kWh
-        <a href="{% url 'update_observation_point' observation_point.id %}">Edytuj</a>
-    <a href="{% url 'delete_observation_point' observation_point.id %}">Usuń</a>
-    </li>
-  {% empty %}
-    <li>Brak lokalizacji</li>
-  {% endfor %}
-      <a href="{% url 'add_observation_point' %}">Dodaj nową lokalizację</a>
-</ul>
+  <div class="max-w-4xl mx-auto mt-20 bg-white shadow-md p-8 rounded">
+    <h2 class="text-2xl font-semibold mb-6 text-center">Twoje lokalizacje</h2>
+
+    {% if observation_points %}
+      <ul class="space-y-6">
+        {% for observation_point in observation_points %}
+          <li class="border border-gray-200 p-6 rounded shadow-sm">
+            <h3 class="text-xl font-semibold text-indigo-700">{{ observation_point.title }}</h3>
+            <p class="text-gray-700 mt-2"><span class="font-medium">Opis:</span> {{ observation_point.description }}</p>
+            <p class="text-gray-700"><span class="font-medium">Lokalizacja:</span> {{ observation_point.latitude }}, {{ observation_point.longitude }}</p>
+            <p class="text-gray-700"><span class="font-medium">Koszt energii:</span> {{ observation_point.energyCostPerKWh }} zł/kWh</p>
+
+            <div class="mt-4 flex gap-3">
+              <a href="{% url 'update_observation_point' observation_point.id %}"
+                 class="bg-indigo-600 text-white py-1.5 px-4 rounded hover:bg-indigo-700 transition text-sm">
+                 Edytuj
+              </a>
+              <a href="{% url 'delete_observation_point' observation_point.id %}"
+                 class="bg-red-500 text-white py-1.5 px-4 rounded hover:bg-red-600 transition text-sm">
+                 Usuń
+              </a>
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="text-center text-gray-600">Brak zapisanych lokalizacji.</p>
+    {% endif %}
+
+    <div class="mt-8 flex justify-center gap-4">
+      <a href="{% url 'add_observation_point' %}"
+         class="bg-green-600 text-white py-2 px-6 rounded hover:bg-green-700 transition">
+         Dodaj nową lokalizację
+      </a>
+
+      <a href="{% url 'dashboard' %}"
+         class="bg-red-500 text-white py-2 px-6 rounded hover:bg-gray-600 transition">
+         Powrót
+      </a>
+    </div>
+
+  </div>
 {% endblock %}
