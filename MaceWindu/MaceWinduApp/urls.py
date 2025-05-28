@@ -19,6 +19,7 @@ urlpatterns=[
     path('profile/updateProfile/',views.update_user_ufl_name_view,name="update_user_profile"),
     path('profile/',views.profile_view,name='profile'),
     path('profile/changePassword/',views.CustomPasswordChangeView.as_view(),name="password_change"),
+    path('profile/deleteAccount',views.delete_account_view,name='delete_account'),
     path('analysisChoice/',views.analysis_choice_view,name="analysis_choice"),
     path('ObservationPointAnalysis/',views.op_analysis_view,name="op_analysis"),
     path('SnapshotAnalysis/',views.snapshot_analysis_view,name='snapshot_analysis'),

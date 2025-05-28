@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>Potwierdzenie usunięcia konta</h2>
+  <p>Czy na pewno chcesz usunąć swoje konto? Tej operacji nie można cofnąć.</p>
+
+  <form method="post">
+    {% csrf_token %}
+    <div class="form-group">
+      <label for="password">Hasło:</label>
+      <input type="password" name="password" id="password" class="form-control" required>
+    </div>
+    <button type="submit" class="btn btn-danger mt-2">Tak, usuń moje konto</button>
+    <a href="{% url 'profile' %}" class="btn btn-secondary mt-2">Anuluj</a>
+  </form>
+{% endblock %}
+

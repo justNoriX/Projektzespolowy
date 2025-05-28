@@ -88,6 +88,19 @@ def update_user_ufl_name_view(request):
         form=UpdateUserUFLNameForm(instance=user)
     return render(request,'update_user_ufl.html',{'form':form})
 
+@login_required
+def delete_account_view(request):
+    if request.method=='POST':
+        password=request.POST.get('password')
+        user=request.user
+        if user.check_password(password):
+            logout(request)
+            user.delete()
+            messages.success(request,'Twoje konto zostało usunięte')
+            return redirect('login')
+        else:
+            messages.error(request,'Niepoprawne hasło')
+    return render(request,'delete_account.html')
 @method_decorator(login_required,name='dispatch')
 class CustomPasswordChangeView(SuccessMessageMixin,PasswordChangeView):
     template_name = 'password_change_form.html'
@@ -130,6 +143,7 @@ def op_analysis_view(request):
         data = GoogleWeatherService.get_hourly_history(lat, lon)
         simplified_data = parse_weather_response(data)
         # print(simplified_data)
+        #tutaj wyciągnięte dane musimy też sobie sparsować do pythonowego query seta oraz zapisać w sesji parametry wiatru aby móc je zapisać do snapshota
 
     except Exception as e:
         return JsonResponse(
