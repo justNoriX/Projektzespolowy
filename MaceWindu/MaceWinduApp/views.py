@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.contrib.auth.tokens import default_token_generator
-from django.contrib.auth.views import PasswordChangeView
+from django.contrib.auth.views import PasswordChangeView, PasswordResetView, PasswordResetDoneView, \
+    PasswordResetConfirmView, PasswordResetCompleteView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
@@ -93,7 +94,21 @@ class CustomPasswordChangeView(SuccessMessageMixin,PasswordChangeView):
     success_url = reverse_lazy('dashboard')
     success_message = "Hasło zostało zmienione pomyślnie"
 
+class CustomForgotPasswordEmailView(SuccessMessageMixin,PasswordResetView):
+    template_name = 'forgot_password_email_form.html'
+    email_template_name = 'email_templates/forgot_password_email.html'
+    subject_template_name ='email_templates/forgot_password_subject.txt'
+    success_url = reverse_lazy('forgot_password_email_sent')
 
+class CustomForgotPasswordEmailSentView(PasswordResetDoneView):
+    template_name = 'forgot_password_email_sent.html'
+
+class CustomForgotPasswordChangeView(SuccessMessageMixin, PasswordResetConfirmView):
+    template_name = 'forgot_password_change_form.html'
+    success_url = reverse_lazy('forgot_password_complete')
+
+class CustomForgotPasswordCompleteView(PasswordResetCompleteView):
+    template_name = 'forgot_password_complete.html'
 @login_required
 def dashboard_view(request):
     return render(request,'dashboard.html',{'user':request.user})

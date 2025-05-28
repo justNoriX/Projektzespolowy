@@ -28,6 +28,7 @@ SECRET_KEY = env('SECRET_KEY')
 # GOOGLE_WEATHER_API_KEY
 GOOGLE_WEATHER_API_KEY = env('GOOGLE_WEATHER_API_KEY')
 
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -119,6 +120,8 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+PASSWORD_RESET_TIMEOUT = 3600
 
 
 # Internationalization

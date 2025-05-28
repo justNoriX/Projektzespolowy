@@ -10,6 +10,10 @@
         Zaloguj się
       </button>
     </form>
+      <p class="mt-4 text-center text-sm">
+      Zapomniałeś hasła?
+      <a href="{% url 'forgot_password_email' %}" class="text-indigo-600 hover:underline">Zresetuj hasła</a>
+    </p>
     <p class="mt-4 text-center text-sm">
       Nie masz konta?
       <a href="{% url 'register' %}" class="text-indigo-600 hover:underline">Zarejestruj się</a>

@@ -2,6 +2,9 @@ from django.urls import path
 from django.views.generic import RedirectView
 
 from . import views
+from .views import CustomForgotPasswordEmailView, CustomForgotPasswordEmailSentView, \
+    CustomForgotPasswordCompleteView, CustomForgotPasswordChangeView
+
 urlpatterns=[
     path('', RedirectView.as_view(url='/MaceWindu/dashboard/', permanent=False)),
     path('register/', views.register_view,name="register"),
@@ -18,7 +21,11 @@ urlpatterns=[
     path('profile/changePassword/',views.CustomPasswordChangeView.as_view(),name="password_change"),
     path('analysisChoice/',views.analysis_choice_view,name="analysis_choice"),
     path('ObservationPointAnalysis/',views.op_analysis_view,name="op_analysis"),
-    path('SnapshotAnalysis/',views.snapshot_analysis_view,name='snapshot_analysis')
+    path('SnapshotAnalysis/',views.snapshot_analysis_view,name='snapshot_analysis'),
+    path('forgotPassword/',CustomForgotPasswordEmailView.as_view(),name='forgot_password_email'),
+    path('forgotPassword/sent/',CustomForgotPasswordEmailSentView.as_view(),name='forgot_password_email_sent'),
+    path('forgotPassword/confirm/<uidb64>/<token>/',CustomForgotPasswordChangeView.as_view(),name='forgot_password_change'),
+    path('forgotPassword/complete/',CustomForgotPasswordCompleteView.as_view(),name='forgot_password_complete')
 
 
 
