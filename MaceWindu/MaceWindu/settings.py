@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'MaceWinduApp'
+    'MaceWinduApp',
+    'django_extensions'
 ]
 
 MIDDLEWARE = [
@@ -103,6 +104,11 @@ EMAIL_HOST_PASSWORD=env('EMAIL_HOST_PASSWORD')
 AUTH_USER_MODEL="MaceWinduApp.CustomUser"
 LOGIN_URL='/MaceWindu/login'
 X_FRAME_OPTIONS="DENY"
+
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
