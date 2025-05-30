@@ -15,7 +15,7 @@ from django.utils.http import urlsafe_base64_decode
 from .mailsender import send_verification_mail
 
 from .forms import CustomUserCreationForm, LoginForm, ObservationPointForm, UpdateUserUFLNameForm
-from .models import ObservationPoint, SnapShot, CustomUser
+from .models import ObservationPoint, CustomUser
 from .services.weather_service import GoogleWeatherService, parse_weather_response
 
 
@@ -128,8 +128,7 @@ def dashboard_view(request):
 @login_required
 def analysis_choice_view(request):
     observation_points=ObservationPoint.objects.filter(user=request.user)
-    snapshots=SnapShot.objects.filter(observation_point__user=request.user)
-    return render(request,'analysis_choice.html',{'observation_points':observation_points, 'snapshots':snapshots})
+    return render(request,'analysis_choice.html',{'observation_points':observation_points})
 
 @login_required
 def op_analysis_view(request):
@@ -143,7 +142,7 @@ def op_analysis_view(request):
         data = GoogleWeatherService.get_hourly_history(lat, lon)
         simplified_data = parse_weather_response(data)
         print(simplified_data)
-        #tutaj wyciągnięte dane musimy też sobie sparsować do pythonowego query seta oraz zapisać w sesji parametry wiatru aby móc je zapisać do snapshota
+
 
     except Exception as e:
         return JsonResponse(
@@ -156,12 +155,7 @@ def op_analysis_view(request):
         "observation_point": observation_point
     })
 
-@login_required
-def snapshot_analysis_view(request):
-    snapshot_id=request.GET.get('snapshot_id')
-    snapshot=get_object_or_404(SnapShot,pk=snapshot_id,user=request.user)
-    #DO PÓŹNIEJSZEJ IMPLEMENTACJI
-    return render(request,'snapshot_analysis.html')
+
 @login_required
 def profile_view(request):
     return render(request,'profile.html',{'user':request.user})

@@ -1,7 +1,6 @@
 from django.core.validators import MinValueValidator, MaxValueValidator, MinLengthValidator
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from django.db.models.functions import Now
 from django.utils.translation import gettext_lazy as _
 
 class CustomUser(AbstractUser):
@@ -65,29 +64,4 @@ class ObservationPoint(models.Model):
             MaxValueValidator(99.99)
         ]
     )
-
-class SnapShot(models.Model):
-    observation_point = models.ForeignKey(
-        ObservationPoint,
-        on_delete=models.CASCADE)
-    title = models.CharField(
-        max_length=20,
-        validators=[
-            MinLengthValidator(5)
-        ]
-    )
-    description = models.TextField(
-        max_length=100
-    )
-    snapshot_date=models.DateField(db_default=Now())
-
-class WindValue(models.Model):
-    snapshot = models.ForeignKey(
-        SnapShot,
-        on_delete=models.CASCADE
-    )
-    time = models.TimeField(db_default=Now())
-    wind_direction = models.IntegerField()
-    speed_value = models.FloatField()
-    gust_value = models.FloatField()
 
