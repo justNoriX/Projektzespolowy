@@ -142,7 +142,7 @@ def op_analysis_view(request):
     try:
         data = GoogleWeatherService.get_hourly_history(lat, lon)
         simplified_data = parse_weather_response(data)
-        # print(simplified_data)
+        print(simplified_data)
         #tutaj wyciągnięte dane musimy też sobie sparsować do pythonowego query seta oraz zapisać w sesji parametry wiatru aby móc je zapisać do snapshota
 
     except Exception as e:
