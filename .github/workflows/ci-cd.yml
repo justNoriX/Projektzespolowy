@@ -1,6 +1,8 @@
 name: Django CI/CD
 permissions:
   contents: read
+  actions: read
+  security-events: write
 on:
   push:
     branches:
