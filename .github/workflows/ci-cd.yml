@@ -45,8 +45,36 @@ jobs:
           echo "EMAIL_HOST_PASSWORD=${{secrets.EMAIL_HOST_PASSWORD}}" >> .env
           echo "GOOGLE_WEATHER_API_KEY=${{secrets.GOOGLE_WEATHER_API_KEY}}" >> .env
 
-      - name: Run tests
+#============pip-audit (SCA)================
+  sca-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Run pip-audit (SCA)
         run: |
-          cd MaceWindu  # Przejdź do katalogu projektu Django
-          python manage.py test
+          pip install pip-audit
+          cd MaceWindu
+          pip-audit
+
+#============Semgrep (SAST)================
+  semgrep-scan:
+    name: Semgrep
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Run Semgrep
+        run: |
+          pip install semgrep
+          cd MaceWindu
+          semgrep --config auto --sarif > semgrep.sarif
+
+      - name: Upload SARIF
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: MaceWindu/semgrep.sarif
 
