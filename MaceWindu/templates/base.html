@@ -10,7 +10,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <!-- Włączenie Tailwind CSS z CDN (alternatywnie: {% load static %} + link do pliku CSS) -->
-  <script src="https://cdn.tailwindcss.com" integrity="sha384-3lMDj6taqFU4WaVzghegEgWEX1nCLsIUZrlpmlpbokCN0Cfv3WQZD7N4svloi+3n"></script>
+    {% load static %}
+  <script src="{% static 'tailwind.js' %}" integrity="sha384-3lMDj6taqFU4WaVzghegEgWEX1nCLsIUZrlpmlpbokCN0Cfv3WQZD7N4svloi+3n"></script>
   <title>MaceWindu</title>
 </head>
 <body class="bg-gray-100">
