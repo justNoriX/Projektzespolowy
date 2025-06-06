@@ -56,11 +56,14 @@ jobs:
 
       - name: Run pip-audit (SCA)
         run: |
-          pip install pip-audit
+          pip install pip-audit pip-audit-sarif
           pip install -r requirements.txt
-          pip-audit --format json > pip-audit.json || true
-          echo "===== pip-audit.json ====="
-          cat pip-audit.json
+          pip-audit --format sarif -o pip-audit.sarif
+
+      - name: Upload SARIF to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: pip-audit.sarif
 
 #============Semgrep (SAST)================
   semgrep-scan:

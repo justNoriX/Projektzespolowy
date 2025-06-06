@@ -1,9 +1,12 @@
 version: 2
 updates:
   - package-ecosystem: "pip"
-    directory: "/"
+    directory: "MaceWindu/"
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 5
-
-
+    rebase-strategy: "auto"
+    commit-message:
+      prefix: "fix(dependancies)"
+    labels:
+      - "dependencies"
