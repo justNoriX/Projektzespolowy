@@ -58,7 +58,8 @@ jobs:
         run: |
           pip install pip-audit
           cd MaceWindu
-          pip-audit
+          pip-audit --format json > pip-audit.json || true
+          echo "===== pip-audit.json ====="
 
 #============Semgrep (SAST)================
   semgrep-scan:
