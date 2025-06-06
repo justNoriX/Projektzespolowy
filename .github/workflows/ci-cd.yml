@@ -58,12 +58,13 @@ jobs:
         run: |
           pip install pip-audit
           pip install -r requirements.txt
-          pip-audit --format sarif -o pip-audit.sarif
+          pip-audit --format json > pip-audit.json
 
-      - name: Upload SARIF to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v3
+      - name: Upload pip-audit report
+        uses: actions/upload-artifact@v4
         with:
-          sarif_file: pip-audit.sarif
+          name: pip-audit-report
+          path: pip-audit.json
 
 #============Semgrep (SAST)================
   semgrep-scan:
