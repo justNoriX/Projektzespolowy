@@ -65,6 +65,7 @@ jobs:
         with:
           name: pip-audit-report
           path: pip-audit.json
+          retention-days: 5
 
 #============Semgrep (SAST)================
   semgrep-scan:
