@@ -56,7 +56,7 @@ jobs:
 
       - name: Run pip-audit (SCA)
         run: |
-          pip install pip-audit pip-audit-sarif
+          pip install pip-audit
           pip install -r requirements.txt
           pip-audit --format sarif -o pip-audit.sarif
 
