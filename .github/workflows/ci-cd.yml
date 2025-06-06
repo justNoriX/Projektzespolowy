@@ -57,6 +57,7 @@ jobs:
       - name: Run pip-audit (SCA)
         run: |
           pip install pip-audit
+          pip install -r requirements.txt
           pip-audit --format json > pip-audit.json || true
           echo "===== pip-audit.json ====="
           cat pip-audit.json
