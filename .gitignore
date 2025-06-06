@@ -1,5 +1,5 @@
 # Python
-db.sqlite3  # Ignorowanie bazy danych SQLite (jeśli używasz)
+db.sqlite3  # Ignorowanie bazy danych SQLite
 *.db
 *.log
 *.pot
@@ -16,7 +16,7 @@ db.sqlite3  # Ignorowanie bazy danych SQLite (jeśli używasz)
 # Virtual environment
 venv/           # Ignorowanie folderu wirtualnego środowiska
 
-# Node.js (jeśli kiedykolwiek dodasz frontend)
+# Node.js
 node_modules/   # Ignorowanie zainstalowanych zależności Node.js
 
 # IDE files
