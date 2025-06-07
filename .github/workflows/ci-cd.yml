@@ -59,7 +59,7 @@ jobs:
         run: |
           pip install pip-audit
           pip install -r requirements.txt
-          pip-audit --format json > pip-audit.json
+          pip-audit --format json | python -m json.tool > pip-audit.json
 
       - name: Upload pip-audit report
         uses: actions/upload-artifact@v4
