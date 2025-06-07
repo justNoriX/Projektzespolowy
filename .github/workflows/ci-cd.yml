@@ -1,4 +1,4 @@
-name: Django CI/CD
+name: CI/CD
 permissions:
   contents: read
   actions: read
@@ -62,6 +62,7 @@ jobs:
           pip-audit --format json | python -m json.tool > pip-audit.json
 
       - name: Upload pip-audit report
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: pip-audit-report
@@ -84,6 +85,7 @@ jobs:
           semgrep --config auto --sarif > semgrep.sarif
 
       - name: Upload SARIF
+        if: always()
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: MaceWindu/semgrep.sarif
