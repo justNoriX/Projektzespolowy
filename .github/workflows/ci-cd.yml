@@ -108,7 +108,7 @@ jobs:
         run: |
           pip install flake8 flake8-json
           pip install -r requirements.txt
-          flake8 MaceWindu/ --ignore=E501 --statistics --count --format=json-pretty > flake8-report.json
+          flake8 . --ignore=E501 --statistics --count --format=json-pretty > flake8-report.json
 
       - name: Upload flake8 report
         if: always()
