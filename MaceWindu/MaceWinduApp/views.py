@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.contrib.auth.models import User
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.views import PasswordChangeView, PasswordResetView, PasswordResetDoneView, \
@@ -150,9 +152,19 @@ def op_analysis_view(request):
             status=500,
         )
 
+    wiatry = []
+    for entry in simplified_data:
+        dt = entry['displayDateTime']
+        godzina = datetime(dt['year'], dt['month'], dt['day'], dt['hours'], dt['minutes'])
+        wiatry.append((godzina, entry['wind']))
+
+    wiatry.sort(key=lambda x: x[0])
+
+    tablica = [{'godzina': godz.strftime("%Y-%m-%d %H:%M"), 'wiatr': wiatr} for godz, wiatr in wiatry]
     return render(request, 'op_analysis.html', {
-        "weather_data": simplified_data,
-        "observation_point": observation_point
+        "weather_data": tablica,
+        "observation_point": observation_point,
+        "price_per_kwh":observation_point.energyCostPerKWh
     })
 
 

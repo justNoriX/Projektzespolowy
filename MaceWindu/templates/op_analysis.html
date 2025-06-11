@@ -1,7 +1,34 @@
 {% extends "base.html" %}
 {% block content %}
+<div class="max-w-5xl mx-auto space-y-8">
+
+  <div class="bg-white shadow-lg rounded-lg p-6">
+    <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Dane pogodowe i oszacowana kwota</h2>
+
+    <div class="overflow-x-auto">
+      <table class="min-w-full table-auto border-collapse">
+        <thead>
+          <tr class="bg-indigo-600 text-white">
+            <th class="py-2 px-4 text-left">Godzina</th>
+            <th class="py-2 px-4 text-left">Prędkość wiatru (km/h)</th>
+            <th class="py-2 px-4 text-left">Kwota (zł)</th>
+          </tr>
+        </thead>
+        <tbody id="resultsTableBody">
+          {% for w in weather_data %}
+            <tr class="border-b hover:bg-gray-100">
+              <td class="py-2 px-4">{{ w.godzina }}</td>
+              <td class="py-2 px-4">{{ w.wiatr }}</td>
+              <td class="py-2 px-4 amount-cell">—</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
   <div class="max-w-xl mx-auto bg-white shadow-lg rounded-lg p-6">
-    <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">MaceWindu Calculator</h2>
+    <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Parametry turbiny</h2>
 
     <div class="space-y-4">
       <div>
@@ -12,81 +39,73 @@
       </div>
 
       <div>
-        <label for="efficiency" class="block text-sm font-medium text-gray-700">Całkowita sprawność turbiny w procentach</label>
+        <label for="efficiency" class="block text-sm font-medium text-gray-700">Całkowita sprawność turbiny [%]</label>
         <input type="number" id="efficiency" step="0.01"
                class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none">
         <div class="text-red-500 text-sm mt-1" id="efficiencyError"></div>
       </div>
 
-      <div>
-        <label for="windSpeed" class="block text-sm font-medium text-gray-700">Prędkość wiatru [m/s]</label>
-        <input type="number" id="windSpeed" step="0.1"
-               class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-        <div class="text-red-500 text-sm mt-1" id="windSpeedError"></div>
-      </div>
-
       <button onclick="calculatePower()"
               class="w-full bg-indigo-600 text-white py-2 px-4 rounded hover:bg-indigo-700 transition">
-        Oblicz moc
+        Oblicz kwoty
       </button>
 
       <a href="{% url 'analysis_choice' %}"
-         class="block w-full text-center bg-red-500 text-white py-2 px-4 rounded hover:bg-gray-600 transition">
+         class="block w-full text-center bg-red-500 text-white py-2 px-4 rounded hover:bg-gray-600 transition mt-2">
          Anuluj
       </a>
-
-      <div id="result" class="text-center font-semibold text-gray-800 text-lg mt-4"></div>
     </div>
   </div>
+</div>
 
-  <script>
-    function calculatePower() {
-      const rho = 1.225;
-      const bladeLengthInput = document.getElementById("bladeLength");
-      const efficiencyInput = document.getElementById("efficiency");
-      const windSpeedInput = document.getElementById("windSpeed");
+<script>
+  function calculatePower() {
+    const rho = 1.225;
+    const bladeLength = parseFloat(document.getElementById("bladeLength").value);
+    const efficiency = parseFloat(document.getElementById("efficiency").value);
+    const pricePerKwh = parseFloat("{{ price_per_kwh }}");
 
-      const bladeLength = parseFloat(bladeLengthInput.value);
-      const efficiency = parseFloat(efficiencyInput.value);
-      const windSpeed = parseFloat(windSpeedInput.value);
+    const bladeLengthInput = document.getElementById("bladeLength");
+    const efficiencyInput = document.getElementById("efficiency");
 
-      let valid = true;
+    let valid = true;
 
-      // Reset błędów
-      [bladeLengthInput, efficiencyInput, windSpeedInput].forEach(el => el.classList.remove('border-red-500', 'bg-red-100'));
-      ['bladeLengthError', 'efficiencyError', 'windSpeedError'].forEach(id => document.getElementById(id).innerText = '');
+    [bladeLengthInput, efficiencyInput].forEach(el => el.classList.remove('border-red-500', 'bg-red-100'));
+    ['bladeLengthError', 'efficiencyError'].forEach(id => document.getElementById(id).innerText = '');
 
-      // Walidacja długości łopat
-      if (isNaN(bladeLength) || bladeLength <= 0) {
-        bladeLengthInput.classList.add('border-red-500', 'bg-red-100');
-        document.getElementById('bladeLengthError').innerText = "Podaj dodatnią długość łopat.";
-        valid = false;
-      }
-
-      // Walidacja sprawności
-      if (isNaN(efficiency) || efficiency <= 0 || efficiency > 100) {
-        efficiencyInput.classList.add('border-red-500', 'bg-red-100');
-        document.getElementById('efficiencyError').innerText = "Sprawność musi być liczbą z przedziału (0–100].";
-        valid = false;
-      }
-
-      // Walidacja prędkości wiatru
-      if (isNaN(windSpeed) || windSpeed <= 0) {
-        windSpeedInput.classList.add('border-red-500', 'bg-red-100');
-        document.getElementById('windSpeedError').innerText = "Podaj dodatnią prędkość wiatru.";
-        valid = false;
-      }
-
-      if (!valid) {
-        document.getElementById("result").innerText = "";
-        return;
-      }
-
-      // Obliczenia
-      const area = Math.PI * Math.pow(bladeLength, 2);
-      const power = 0.5 * rho * area * Math.pow(windSpeed, 3) * efficiency/100;
-
-      document.getElementById("result").innerText = `Moc wiatru: ${(power / 1000).toFixed(2)} kW`;
+    if (isNaN(bladeLength) || bladeLength <= 0) {
+      bladeLengthInput.classList.add('border-red-500', 'bg-red-100');
+      document.getElementById('bladeLengthError').innerText = "Podaj dodatnią długość łopat.";
+      valid = false;
     }
-  </script>
+
+    if (isNaN(efficiency) || efficiency <= 0 || efficiency > 100) {
+      efficiencyInput.classList.add('border-red-500', 'bg-red-100');
+      document.getElementById('efficiencyError').innerText = "Sprawność musi być liczbą z przedziału (0–100].";
+      valid = false;
+    }
+
+    if (!valid) return;
+
+    const area = Math.PI * Math.pow(bladeLength, 2);
+    const rows = document.querySelectorAll("#resultsTableBody tr");
+
+    rows.forEach(row => {
+      const windCell = row.children[1];
+      const outputCell = row.children[2];
+
+      const windKph = parseFloat(windCell.innerText);
+      const windSpeed = windKph / 3.6;
+
+      if (!isNaN(windSpeed)) {
+        const powerWatts = 0.5 * rho * area * Math.pow(windSpeed, 3) * (efficiency / 100);
+        const energyKWh = powerWatts / 1000;
+        const cost = energyKWh * pricePerKwh;
+        outputCell.innerText = cost.toFixed(2);
+      } else {
+        outputCell.innerText = "—";
+      }
+    });
+  }
+</script>
 {% endblock %}
