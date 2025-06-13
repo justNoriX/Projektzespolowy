@@ -1,7 +1,18 @@
-from django.core.validators import MinValueValidator, MaxValueValidator, MinLengthValidator
+from django.core.validators import MinValueValidator, MaxValueValidator, MinLengthValidator, RegexValidator
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
+
+only_letters = RegexValidator(
+    regex=r'^[A-Za-zĄąĆćĘęŁłŃńÓóŚśŹźŻż]+$',
+    message='To pole może zawierać tylko litery alfabetu (bez cyfr i znaków specjalnych).'
+)
+
+letters_with_space = RegexValidator(
+    regex=r'^[A-Za-zĄąĆćĘęŁłŃńÓóŚśŹźŻż ]+$',
+    message='To pole może zawierać tylko litery i spacje (bez cyfr i znaków specjalnych).'
+)
+
 
 class CustomUser(AbstractUser):
 
@@ -15,12 +26,12 @@ class CustomUser(AbstractUser):
     )
     first_name = models.CharField(
         max_length=20,
-        validators=[MinLengthValidator(2)]
+        validators=[MinLengthValidator(2),only_letters]
 
     )
     last_name = models.CharField(
         max_length=30,
-        validators=[MinLengthValidator(2)]
+        validators=[MinLengthValidator(2),letters_with_space]
     )
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username','first_name','last_name']

@@ -1,16 +1,27 @@
 {% extends "base.html" %}
 {% block content %}
-  <h2>Potwierdzenie usunięcia konta</h2>
-  <p>Czy na pewno chcesz usunąć swoje konto? Tej operacji nie można cofnąć.</p>
+  <div class="max-w-md mx-auto bg-white shadow-lg rounded-lg p-6 mt-10">
+    <h2 class="text-2xl font-bold text-red-600 text-center mb-4">Potwierdzenie usunięcia konta</h2>
+    <p class="text-gray-700 text-center mb-6">Czy na pewno chcesz usunąć swoje konto? Tej operacji nie można cofnąć.</p>
 
-  <form method="post">
-    {% csrf_token %}
-    <div class="form-group">
-      <label for="password">Hasło:</label>
-      <input type="password" name="password" id="password" class="form-control" required>
-    </div>
-    <button type="submit" class="btn btn-danger mt-2">Tak, usuń moje konto</button>
-    <a href="{% url 'profile' %}" class="btn btn-secondary mt-2">Anuluj</a>
-  </form>
+    <form method="post">
+      {% csrf_token %}
+      <div class="mb-4">
+        <label for="password" class="block text-sm font-medium text-gray-700">Hasło:</label>
+        <input type="password" name="password" id="password"
+               class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-red-500 focus:outline-none"
+               required>
+      </div>
+      <div class="flex justify-between">
+        <button type="submit"
+                class="bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700 transition">
+          Tak, usuń moje konto
+        </button>
+        <a href="{% url 'profile' %}"
+           class="bg-gray-400 text-white py-2 px-4 rounded hover:bg-gray-500 transition">
+          Anuluj
+        </a>
+      </div>
+    </form>
+  </div>
 {% endblock %}
-
