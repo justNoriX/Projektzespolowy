@@ -1,18 +1,118 @@
 {% extends "base.html" %}
 {% block content %}
-  <div class="max-w-md mx-auto mt-20 bg-white shadow-md p-8 rounded">
-    <h2 class="text-2xl font-semibold mb-6 text-center">Rejestracja</h2>
-    <form method="post" class="space-y-4">
-      {% csrf_token %}
-      {{ form.as_p }}
-      <button type="submit" class="w-full bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700 transition">
-        Zarejestruj się
-      </button>
-    </form>
-    <p class="mt-4 text-center text-sm">
-      Masz już konto?
-      <a href="{% url 'login' %}" class="text-indigo-600 hover:underline">Zaloguj się</a>
-    </p>
-  </div>
+<div class="max-w-md mx-auto mt-20 bg-white shadow-md p-8 rounded">
+  <h2 class="text-2xl font-semibold mb-6 text-center">Rejestracja</h2>
+  <form method="post" class="space-y-4" id="registration-form">
+    {% csrf_token %}
+
+    <div>
+      {{ form.username.label_tag }}
+      {{ form.username }}
+      {% if form.username.errors %}
+        <p class="text-sm text-red-500">{{ form.username.errors.0 }}</p>
+      {% endif %}
+    </div>
+
+    <div>
+      {{ form.first_name.label_tag }}
+      {{ form.first_name }}
+      {% if form.first_name.errors %}
+        <p class="text-sm text-red-500">{{ form.first_name.errors.0 }}</p>
+      {% endif %}
+    </div>
+
+    <div>
+      {{ form.last_name.label_tag }}
+      {{ form.last_name }}
+      {% if form.last_name.errors %}
+        <p class="text-sm text-red-500">{{ form.last_name.errors.0 }}</p>
+      {% endif %}
+    </div>
+
+    <div>
+      {{ form.email.label_tag }}
+      {{ form.email }}
+      {% if form.email.errors %}
+        <p class="text-sm text-red-500">{{ form.email.errors.0 }}</p>
+      {% endif %}
+    </div>
+
+    <div>
+      {{ form.password1.label_tag }}
+      <div class="relative">
+        {{ form.password1 }}
+        <button type="button" onclick="togglePassword('id_password1')" class="absolute right-3 top-2 text-sm text-gray-500 hover:text-gray-700">
+          👁️
+        </button>
+      </div>
+      <div id="password-length-warning" class="text-red-500 text-sm mt-1 hidden">
+        Hasło musi mieć od 12 do 128 znaków.
+      </div>
+      <div class="mt-2">
+        <div class="h-2 bg-gray-200 rounded">
+          <div id="password-strength-bar" class="h-2 bg-red-500 rounded w-0 transition-all duration-300"></div>
+        </div>
+        <p id="password-strength-text" class="text-xs mt-1 text-gray-600"></p>
+      </div>
+    </div>
+
+    <div>
+      {{ form.password2.label_tag }}
+      <div class="relative">
+        {{ form.password2 }}
+        <button type="button" onclick="togglePassword('id_password2')" class="absolute right-3 top-2 text-sm text-gray-500 hover:text-gray-700">
+          👁️
+        </button>
+      </div>
+    </div>
+
+    <button type="submit"
+      class="w-full bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700 transition">
+      Zarejestruj się
+    </button>
+  </form>
+
+  <p class="mt-4 text-center text-sm">
+    Masz już konto?
+    <a href="{% url 'login' %}" class="text-indigo-600 hover:underline">Zaloguj się</a>
+  </p>
+</div>
+
+<script>
+  const passwordInput = document.getElementById("id_password1");
+  const warning = document.getElementById("password-length-warning");
+  const strengthBar = document.getElementById("password-strength-bar");
+  const strengthText = document.getElementById("password-strength-text");
+
+  passwordInput.addEventListener("input", () => {
+    const value = passwordInput.value;
+    const length = value.length;
+
+    // Walidacja długości
+    if (length < 12 || length > 128) {
+      warning.classList.remove("hidden");
+    } else {
+      warning.classList.add("hidden");
+    }
+
+    // Ocena siły hasła
+    let strength = 0;
+    if (value.length >= 12) strength += 1;
+    if (/[a-z]/.test(value) && /[A-Z]/.test(value)) strength += 1;
+    if (/\d/.test(value)) strength += 1;
+    if (/[\W_]/.test(value)) strength += 1;
+
+    const strengthColors = ["w-0", "w-1/4 bg-red-500", "w-1/2 bg-yellow-500", "w-3/4 bg-blue-500", "w-full bg-green-500"];
+    const strengthLabels = ["Bardzo słabe", "Słabe", "Średnie", "Dobre", "Silne"];
+
+    strengthBar.className = `h-2 rounded transition-all duration-300 ${strengthColors[strength]}`;
+    strengthText.textContent = strengthLabels[strength];
+  });
+
+  function togglePassword(id) {
+    const input = document.getElementById(id);
+    input.type = input.type === "password" ? "text" : "password";
+  }
+</script>
 {% endblock %}
 
