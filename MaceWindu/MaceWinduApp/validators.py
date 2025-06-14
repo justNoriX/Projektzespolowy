@@ -12,3 +12,6 @@ class MaximumLengthValidator:
                 code='password_too_long',
                 params={'max_length': self.max_length},
             )
+
+    def get_help_text(self):
+        return f"Twoje hasło nie może mieć więcej niż {self.max_length} znaków."
