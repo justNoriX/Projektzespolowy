@@ -76,7 +76,7 @@ jobs:
     steps:
 
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
 
       - name: Run Semgrep
         run: |
@@ -86,7 +86,7 @@ jobs:
 
       - name: Upload SARIF
         if: always()
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@2c6d525faa37685eb8a677b041e49725dd8d44cb
         with:
           sarif_file: MaceWindu/semgrep.sarif
 
